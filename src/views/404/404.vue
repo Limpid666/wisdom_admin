@@ -1,32 +1,20 @@
 <template>
-  <div class="aside">
-
+  <div class="">
+    404
   </div>
 </template>
 <script>
-
 export default {
   name: '',
-  components: {
-
-  },
+  components: {},
   data() {
-    return {
-
-    }
+    return {}
   },
-  methods: {
-
-  },
-  created() {
-
-  },
+  methods: {},
+  created() { },
   mounted() { }
 
 }
 </script>
 <style scoped lang='scss'>
-.el-main {
-  border-right: none;
-}
 </style>

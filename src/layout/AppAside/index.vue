@@ -31,4 +31,7 @@ export default {
 }
 </script>
 <style scoped lang='scss'>
+.el-menu{
+  border-right: none;
+}
 </style>

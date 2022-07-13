@@ -15,9 +15,9 @@
   </el-container>
 </template>
 <script>
-import AppHeader from '@/logout/AppHeader'
-import AppMain from '@/logout/AppMain'
-import AppAside from '@/logout/AppAside'
+import AppHeader from '@/layout/AppHeader'
+import AppMain from '@/layout/AppMain'
+import AppAside from '@/layout/AppAside'
 export default {
   components: {
     AppHeader, AppMain, AppAside

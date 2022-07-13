@@ -4,7 +4,10 @@ import { getItem, setItem } from '@/utils/storage'
 export default {
   namespaced: true,
   state: {
-    token: getItem('token') || ''
+    token: getItem('token') || '',
+    userInfo: '',
+    routes: '',
+    menus: ''
   },
   mutations: {
     setToken(state, token) {
@@ -18,6 +21,16 @@ export default {
       console.log('token=>', token)
       commit('setToken', token)
       return token
+    },
+    async getUserInfo({ commit }) {
+      const userInfo = await UserApi.getUserInfo()
+      commit('setUserInfo', userInfo)
+      return userInfo
+    },
+    async getRouters({ commit }) {
+      const routes = await UserApi.getRouters()
+      commit('setRouterrs', routes)
+      return routes
     }
   }
 }

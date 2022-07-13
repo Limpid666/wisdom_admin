@@ -19,11 +19,10 @@ export default {
   },
   created() { },
   mounted() { }
-
 }
 </script>
 <style scoped lang='scss'>
-.home{
+.home {
   background-color: #fff;
   height: 85vh;
 }
