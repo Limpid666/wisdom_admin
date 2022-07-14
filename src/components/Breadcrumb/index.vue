@@ -1,3 +1,5 @@
+/* 澈澈 */
+/* 面包屑 */
 <template>
   <div class="">
 
@@ -6,15 +8,16 @@
 <script>
 export default {
   name: '',
-  components: {},
-  data() {
-    return {}
+  components: { },
+  data () {
+    return { }
   },
-  methods: {},
-  created() { },
-  mounted() { }
+  methods: { },
+  created () { },
+  mounted () { }
 
 }
 </script>
 <style scoped lang='scss'>
+
 </style>

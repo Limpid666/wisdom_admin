@@ -1,100 +1,129 @@
 <template>
-  <div class="concat">
-    <div class="left-concat"></div>
-    <div class="right-concat">
-      <img src="" alt="">
+  <div class="header">
+    <div class="left-container">
+      <el-button @click="handleCollapseMenu" size="mini" type="text"
+        :icon="$store.getters.isCollapse ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></el-button>
+      <div class="tags-view">
+        <app-tags></app-tags>
+      </div>
+    </div>
+    <div class="right-container">
+      <div class="right-tool-tip">
+        <el-tooltip class="full" effect="dark" content="全屏" placement="bottom">
+          <i class="el-icon-rank hand white" style="font-size:25px;"></i>
+        </el-tooltip>
+        <el-tooltip effect="dark" content="关闭全部标签" placement="bottom">
+          <i @click="handleRemoveAllTags" class="el-icon-circle-close hand white" style="font-size:25px;"></i>
+        </el-tooltip>
+      </div>
+      <!-- 头像 -->
+      <el-avatar class="avatar-H avatar-img hand" v-if="$store.getters.userInfo"
+        :src="$store.getters.userInfo.avatar ? $store.getters.userInfo.avatar : ''"></el-avatar>
       <el-dropdown @command="handleCommand">
-        <span class="el-dropdown-link">
-          duck<i class="el-icon-arrow-down el-icon--right"></i>
+        <span class="el-dropdown-link hand">
+          {{ $store.getters.userInfo.username || "" }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="personalSetting">个人设置</el-dropdown-item>
-          <el-dropdown-item command="logOutSafely">安全退出</el-dropdown-item>
+          <el-dropdown-item command="settings">个人设置</el-dropdown-item>
+          <el-dropdown-item command="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-
-      <!-- 弹框 -->
-      <el-dialog title="编辑个人信息" :visible.sync="dialogVisible" width="30%">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="账号" prop="code">
-            <el-input v-model="ruleForm.code"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input v-model="ruleForm.password"></el-input>
-          </el-form-item>
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="ruleForm.email"></el-input>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="success" @click="dialogVisible = false">确 定</el-button>
-        </span>
-      </el-dialog>
     </div>
   </div>
 </template>
+
 <script>
+import AppTags from './tagview.vue'
 export default {
-  components: {
-
-  },
-  data() {
-    return {
-      dialogVisible: false,
-      ruleForm: {
-        username: '',
-        password: '',
-        email: ''
-      },
-      rules: {
-        username: [
-          { required: true, message: '请输入账号', trigger: 'blur' }
-        ],
-        email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
-        ]
-      }
-    }
-  },
+  name: 'index',
+  components: { AppTags },
   methods: {
+    handleCollapseMenu() {
+      this.$store.dispatch('menu/setCollapse')
+    },
+    handleSettings() {
+      alert('个人设置')
+    },
+    async handleLogout() {
+      const response = await this.$store.dispatch('user/logout')
+      if (response) {
+        this.$notify.success({
+          title: '提示',
+          message: '您已成功退出登录'
+        })
+        this.$router.push('/login')
+      }
+    },
     handleCommand(command) {
-      this.$message('点击了 ' + command)
+      switch (command) {
+        case 'settings':
+          this.handleSettings()
+          break
+        case 'logout':
+          this.handleLogout()
+          break
+      }
+    },
+    handleRemoveAllTags() {
+      this.$store.dispatch('tags/removeAllTag')
+      this.$router.push('/index')
     }
-    // outlogin() {
-    //   this.$confirm('确定退出吗?', '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   })
-    //     .then(async () => {
-    //       const res = await this.$axios.get('/logout')
-    //       if (res.code === 200) {
-    //         // 删除token, 需要提前设置token.js
-    //         // removeToken()
-    //         // 跳转到登录页面
-    //         this.$router.push('/login')
-    //       }
-    //       this.$message({
-    //         type: 'success',
-    //         message: '退出成功!'
-    //       })
-    //     })
-    //     .catch(() => { })
-    // }
-  },
-  created() { },
-  mounted() { }
-
+  }
 }
 </script>
-<style scoped lang='scss'>
-.concat {
+
+<style lang="scss" scoped>
+.header {
+  height: 100%;
   display: flex;
   justify-content: space-between;
-  align-content: center;
+  align-items: center;
+
+  .left-container {
+    display: flex;
+    align-items: center;
+
+    .el-button {
+      font-size: 25px;
+      color: #fff;
+    }
+  }
+
+  .right-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    .right-tool-tip {
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      .full {
+        margin-right: 20px;
+        // 旋转
+        transform: rotate(20deg);
+        -webkit-transform: rotate(20deg);
+        /*兼容-webkit-引擎浏览器*/
+        -moz-transform: rotate(20deg);
+        /*兼容-moz-引擎浏览器*/
+      }
+    }
+
+    .avatar-img {
+      margin-left: 20px;
+    }
+
+    .el-dropdown {
+      margin-left: 15px;
+      height: 100%;
+
+      .el-dropdown-link {
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+  }
 }
 </style>

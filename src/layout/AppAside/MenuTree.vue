@@ -1,42 +1,31 @@
 <template>
-  <div class="">
-
-    <el-menu-item index="/home">
-      <i class="el-icon-s-home"></i>
-      <span slot="title">控制台</span>
+  <div>
+    <el-menu-item v-if="!item.children || (item.children && item.children.length <= 0)"
+      :index="item.path === '/' ? '/index' : item.path">
+      <i :class="'el-icon-' + item.icon"></i>
+      <span slot="title">{{ item.title }}</span>
     </el-menu-item>
-    <el-submenu index="1">
+    <el-submenu v-if="item.children && item.children.length > 0" :index="item.path">
       <template slot="title">
-        <i class="el-icon-s-grid"></i>
-        <span>系统管理</span>
+        <i :class="'el-icon-' + item.icon"></i>
+        <span>{{ item.title }}</span>
       </template>
-      <el-menu-item index="/user">
-        <i class="el-icon-user"></i>
-        <span>用户管理</span>
-      </el-menu-item>
-      <el-menu-item index="/users">
-        <i class="el-icon-user-solid"></i>
-        <span>角色管理</span>
-      </el-menu-item>
-      <el-menu-item index="/menus">
-        <i class="el-icon-menu"></i>
-        <span>菜单管理</span>
-      </el-menu-item>
+      <MenuTree v-for="(childItem, index) in item.children" :key="index" :item="childItem"></MenuTree>
     </el-submenu>
   </div>
 </template>
+
 <script>
 export default {
-  name: '',
-  components: {},
-  data() {
-    return {}
-  },
-  methods: {},
-  created() { },
-  mounted() { }
-
+  name: 'MenuTree',
+  props: {
+    item: {
+      type: Object,
+      default: () => { }
+    }
+  }
 }
 </script>
-<style scoped lang='scss'>
+
+<style scoped>
 </style>

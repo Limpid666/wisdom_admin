@@ -7,10 +7,10 @@
   </div>
 </template>
 <script>
-import navigationBar from '@/api/navigationBar'
+// import navigationBar from '@/api/navigationBar'
+import { filterMenus } from '@/utils/menus'
 import MenuTree from './MenuTree.vue'
 export default {
-  name: '',
   components: {
     // eslint-disable-next-line vue/no-unused-components
     MenuTree
@@ -19,19 +19,32 @@ export default {
     return {}
   },
   methods: {
-    async menus() {
-      const menus = await navigationBar.navigation()
-      console.log(menus)
-    }
+    // async menus() {
+    //   const menus = await navigationBar.navigation()
+    //   console.log(menus)
+    // }
   },
   created() {
-    this.menus()
+    console.log('create', this.menus)
   },
-  mounted() { }
+  computed: {
+    activePath() {
+      return this.$route.path
+    },
+    // eslint-disable-next-line vue/return-in-computed-property
+    menus() {
+      if (this.$store.getters.menus) {
+        return filterMenus(this.$store.getters.menus)
+      }
+    },
+    isCollapse() {
+      return this.$store.getters.isCollapse
+    }
+  }
 }
 </script>
 <style scoped lang='scss'>
-.el-menu{
+.el-menu {
   border-right: none;
 }
 </style>

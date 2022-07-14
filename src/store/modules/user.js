@@ -1,18 +1,27 @@
 import UserApi from '@/api/user'
-import { getItem, setItem } from '@/utils/storage'
+import { getItem, setItem, removeItem } from '@/utils/storage'
 
 export default {
   namespaced: true,
   state: {
     token: getItem('token') || '',
     userInfo: '',
-    routes: '',
-    menus: ''
+    menus: '',
+    permission: ''
   },
   mutations: {
     setToken(state, token) {
       state.token = token
       setItem('token', token)
+    },
+    setUserInfo(state, userInfo) {
+      state.userInfo = userInfo
+    },
+    setPermission(state, permission) {
+      state.permission = permission
+    },
+    setMenus(state, menus) {
+      state.menus = menus
     }
   },
   actions: {
@@ -23,7 +32,7 @@ export default {
       return token
     },
     async getUserInfo({ commit }) {
-      const userInfo = await UserApi.getUserInfo()
+      const userInfo = await UserApi.loginUserInfo()
       commit('setUserInfo', userInfo)
       return userInfo
     },
@@ -31,6 +40,25 @@ export default {
       const routes = await UserApi.getRouters()
       commit('setRouterrs', routes)
       return routes
+    },
+    async getPermission({ commit }) {
+      const { authoritys, menus } = await UserApi.getPermissionList()
+      if (authoritys.length > 0 && menus.length > 0) {
+        commit('setPermission', authoritys)
+        commit('setMenus', menus)
+        return { authoritys, menus }
+      } else {
+        return false
+      }
+    },
+    async logout({ commit }) {
+      await UserApi.logout()
+      commit('setToken', '')
+      commit('setUserInfo', '')
+      commit('setPermission', '')
+      commit('setMenus', '')
+      removeItem('token')
+      return true
     }
   }
 }

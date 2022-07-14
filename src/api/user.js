@@ -26,13 +26,22 @@ const loginUserInfo = () => {
   return request({ url: '/user/info', method: 'GET' })
 }
 // 当前用户退出登录
-const loginOutUserInfo = () => {
+const logout = () => {
   return request({ url: '/logout', method: 'POST' })
+}
+
+// 获取用户权限接口
+const getPermissionList = () => {
+  return request({
+    url: '/menu/nav',
+    method: 'GET'
+  })
 }
 // 导出api
 export default {
   getCaptcha,
   login,
   loginUserInfo,
-  loginOutUserInfo
+  logout,
+  getPermissionList
 }
